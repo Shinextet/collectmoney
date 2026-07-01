@@ -3,60 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ငွေစုမှတ်တမ်း</title>
+    <title>ငွေစုမှတ်တမ်း Pro</title>
+    <!-- PWA Settings -->
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="mobile-web-app-capable" content="yes">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; }
-        .app-card { background: linear-gradient(145deg, #ffffff, #f0f0f0); }
+        @import url('https://fonts.googleapis.com/css2?family=Pyidaungsu:wght@400;700&display=swap');
+        body { font-family: 'Pyidaungsu', sans-serif; background-color: #f8fafc; }
+        .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body class="bg-blue-50 min-h-screen">
-    <header class="bg-blue-600 text-white p-4 shadow-lg text-center font-bold text-lg sticky top-0 z-10">
-        ငွေစုမှတ်တမ်း (Saving Tracker)
-    </header>
+<body class="min-h-screen p-4 pb-20">
 
-    <div class="p-4 max-w-md mx-auto">
-        <div class="app-card rounded-2xl shadow-xl p-6 border border-white">
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-sm font-semibold text-gray-600">ပန်းတိုင် (ကျပ်)</label>
-                    <input type="number" id="goal" class="w-full mt-1 p-3 border-2 rounded-xl focus:border-blue-500 outline-none" placeholder="၁,၆၀၀,၀၀၀">
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold text-gray-600">နေ့စွဲ</label>
-                    <input type="date" id="date" class="w-full mt-1 p-3 border-2 rounded-xl focus:border-blue-500 outline-none">
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold text-gray-600">စုငွေ (ကျပ်)</label>
-                    <input type="number" id="amount" class="w-full mt-1 p-3 border-2 rounded-xl focus:border-blue-500 outline-none" placeholder="၅,၀၀၀">
-                </div>
-                <button onclick="addEntry()" class="w-full bg-blue-600 text-white py-3 rounded-xl hover:bg-blue-700 transition font-bold shadow-md">မှတ်တမ်းတင်မည်</button>
+    <div class="max-w-sm mx-auto">
+        <header class="text-center py-6">
+            <h1 class="text-2xl font-bold text-gray-800">ငွေစုမှတ်တမ်း</h1>
+            <p class="text-gray-500 text-sm">သင့်ရဲ့ ငွေစုပန်းတိုင်ဆီသို့</p>
+        </header>
+
+        <!-- Goal Card -->
+        <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 mb-6">
+            <label class="text-xs font-bold text-gray-400 uppercase tracking-wider">ပန်းတိုင်ငွေပမာဏ</label>
+            <input type="number" id="goal" class="w-full text-3xl font-bold text-blue-600 outline-none border-none p-0 mt-1 bg-transparent" placeholder="0.00">
+        </div>
+
+        <!-- Add Entry Form -->
+        <div class="grid grid-cols-2 gap-4 mb-6">
+            <input type="date" id="date" class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm outline-none text-gray-700">
+            <input type="number" id="amount" class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm outline-none text-gray-700" placeholder="စုငွေ">
+            <button onclick="addEntry()" class="col-span-2 bg-gray-900 text-white py-4 rounded-2xl font-bold active:scale-95 transition-transform">မှတ်တမ်းတင်မည်</button>
+        </div>
+
+        <!-- Dashboard -->
+        <div class="flex gap-4 mb-6">
+            <div class="flex-1 bg-blue-600 text-white p-5 rounded-3xl shadow-lg shadow-blue-200">
+                <p class="text-blue-100 text-xs font-medium">စုစုပေါင်း</p>
+                <h2 id="totalDisplay" class="text-2xl font-bold">0</h2>
             </div>
-
-            <div class="grid grid-cols-2 gap-4 mt-8">
-                <div class="bg-blue-100 p-4 rounded-xl text-center">
-                    <p class="text-xs text-blue-600 font-bold">စုစုပေါင်း</p>
-                    <span id="totalDisplay" class="text-xl font-bold text-blue-800">၀</span>
-                </div>
-                <div class="bg-red-100 p-4 rounded-xl text-center">
-                    <p class="text-xs text-red-600 font-bold">ကျန်ရှိ</p>
-                    <span id="remainingDisplay" class="text-xl font-bold text-red-800">၀</span>
-                </div>
+            <div class="flex-1 bg-white p-5 rounded-3xl shadow-sm border border-gray-100">
+                <p class="text-gray-400 text-xs font-medium">ကျန်ရှိ</p>
+                <h2 id="remainingDisplay" class="text-2xl font-bold text-gray-800">0</h2>
             </div>
         </div>
 
-        <div class="mt-6 bg-white rounded-2xl shadow-md p-4">
-            <h2 class="font-bold text-gray-700 mb-4 border-b pb-2">မှတ်တမ်းများ</h2>
-            <div class="max-h-60 overflow-y-auto">
-                <table class="w-full text-sm">
-                    <tbody id="history" class="divide-y"></tbody>
-                </table>
-            </div>
+        <!-- History -->
+        <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
+            <h3 class="font-bold text-gray-800 mb-4">လတ်တလော မှတ်တမ်း</h3>
+            <div id="history" class="space-y-4 max-h-64 overflow-y-auto no-scrollbar"></div>
         </div>
-        
-        <button onclick="resetApp()" class="mt-6 w-full text-xs text-gray-400">အချက်အလက်အားလုံး ဖျက်မည်</button>
+
+        <button onclick="resetApp()" class="w-full text-center mt-8 text-gray-400 text-xs hover:text-red-500 transition">အချက်အလက်အားလုံး ဖျက်မည်</button>
     </div>
 
     <script>
@@ -64,12 +63,14 @@
         let goal = localStorage.getItem('goal') || 0;
 
         const goalInput = document.getElementById('goal');
-        const historyTable = document.getElementById('history');
+        const historyContainer = document.getElementById('history');
 
         if (goal > 0) {
             goalInput.value = goal;
             goalInput.disabled = true;
+            goalInput.classList.add('text-gray-800');
         }
+
         document.getElementById('date').valueAsDate = new Date();
         updateUI();
 
@@ -89,7 +90,7 @@
                 document.getElementById('amount').value = '';
                 updateUI();
             } else {
-                alert('ပန်းတိုင်နှင့် စုငွေပမာဏကို စစ်ဆေးပေးပါ။');
+                alert('ပန်းတိုင်နှင့် ငွေပမာဏကို စစ်ဆေးပေးပါ။');
             }
         }
 
@@ -98,16 +99,18 @@
             document.getElementById('totalDisplay').innerText = total.toLocaleString();
             document.getElementById('remainingDisplay').innerText = Math.max(0, goal - total).toLocaleString();
             
-            historyTable.innerHTML = savings.slice().reverse().map(item => `
-                <tr>
-                    <td class="py-3 text-gray-500">${item.date}</td>
-                    <td class="text-right py-3 font-semibold text-gray-800">${item.amount.toLocaleString()}</td>
-                </tr>
+            historyContainer.innerHTML = savings.slice().reverse().map(item => `
+                <div class="flex justify-between items-center border-b border-gray-50 pb-3">
+                    <div>
+                        <p class="text-sm font-medium text-gray-800">${item.date}</p>
+                    </div>
+                    <p class="font-bold text-gray-900">+ ${item.amount.toLocaleString()}</p>
+                </div>
             `).join('');
         }
 
         function resetApp() {
-            if (confirm('အချက်အလက်အားလုံးကို ဖျက်လိုက်မှာသေချာပါသလား?')) {
+            if (confirm('ဒေတာအားလုံး ဖျက်ပစ်မှာ သေချာပါသလား?')) {
                 localStorage.clear();
                 location.reload();
             }
