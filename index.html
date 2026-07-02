@@ -4,58 +4,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ငွေစုမှတ်တမ်း Pro</title>
-    <!-- PWA Settings -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="mobile-web-app-capable" content="yes">
+    <!-- Tailwind CSS (Offline Mode) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Pyidaungsu:wght@400;700&display=swap');
-        body { font-family: 'Pyidaungsu', sans-serif; background-color: #f8fafc; }
-        .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+        body { background-color: #121212; color: #ffffff; font-family: sans-serif; }
+        .card { background-color: #1e1e1e; }
+        input { background-color: #2a2a2a !important; color: white !important; border: none !important; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body class="min-h-screen p-4 pb-20">
+<body class="p-4">
 
-    <div class="max-w-sm mx-auto">
-        <header class="text-center py-6">
-            <h1 class="text-2xl font-bold text-gray-800">ငွေစုမှတ်တမ်း</h1>
-            <p class="text-gray-500 text-sm">သင့်ရဲ့ ငွေစုပန်းတိုင်ဆီသို့</p>
-        </header>
+    <div class="max-w-sm mx-auto mt-4">
+        <h1 class="text-xl font-bold text-center mb-6">ငွေစုမှတ်တမ်း</h1>
 
         <!-- Goal Card -->
-        <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 mb-6">
-            <label class="text-xs font-bold text-gray-400 uppercase tracking-wider">ပန်းတိုင်ငွေပမာဏ</label>
-            <input type="number" id="goal" class="w-full text-3xl font-bold text-blue-600 outline-none border-none p-0 mt-1 bg-transparent" placeholder="0.00">
+        <div class="card rounded-2xl p-6 mb-6">
+            <label class="text-xs text-gray-400 uppercase">ပန်းတိုင်ငွေပမာဏ</label>
+            <input type="number" id="goal" class="w-full text-3xl font-bold mt-2 p-2 rounded-lg" placeholder="1,600,000">
         </div>
 
-        <!-- Add Entry Form -->
+        <!-- Inputs -->
         <div class="grid grid-cols-2 gap-4 mb-6">
-            <input type="date" id="date" class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm outline-none text-gray-700">
-            <input type="number" id="amount" class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm outline-none text-gray-700" placeholder="စုငွေ">
-            <button onclick="addEntry()" class="col-span-2 bg-gray-900 text-white py-4 rounded-2xl font-bold active:scale-95 transition-transform">မှတ်တမ်းတင်မည်</button>
+            <input type="date" id="date" class="p-4 rounded-2xl text-center">
+            <input type="number" id="amount" class="p-4 rounded-2xl text-center" placeholder="စုငွေ">
+            <button onclick="addEntry()" class="col-span-2 bg-blue-600 py-4 rounded-2xl font-bold active:bg-blue-700">မှတ်တမ်းတင်မည်</button>
         </div>
 
         <!-- Dashboard -->
         <div class="flex gap-4 mb-6">
-            <div class="flex-1 bg-blue-600 text-white p-5 rounded-3xl shadow-lg shadow-blue-200">
-                <p class="text-blue-100 text-xs font-medium">စုစုပေါင်း</p>
+            <div class="flex-1 bg-blue-600 p-5 rounded-3xl">
+                <p class="text-blue-200 text-xs">စုစုပေါင်း</p>
                 <h2 id="totalDisplay" class="text-2xl font-bold">0</h2>
             </div>
-            <div class="flex-1 bg-white p-5 rounded-3xl shadow-sm border border-gray-100">
-                <p class="text-gray-400 text-xs font-medium">ကျန်ရှိ</p>
-                <h2 id="remainingDisplay" class="text-2xl font-bold text-gray-800">0</h2>
+            <div class="flex-1 card p-5 rounded-3xl">
+                <p class="text-gray-400 text-xs">ကျန်ရှိ</p>
+                <h2 id="remainingDisplay" class="text-2xl font-bold">0</h2>
             </div>
         </div>
 
         <!-- History -->
-        <div class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
-            <h3 class="font-bold text-gray-800 mb-4">လတ်တလော မှတ်တမ်း</h3>
-            <div id="history" class="space-y-4 max-h-64 overflow-y-auto no-scrollbar"></div>
+        <div class="card rounded-3xl p-6">
+            <h3 class="font-bold mb-4">လတ်တလော မှတ်တမ်း</h3>
+            <div id="history" class="space-y-4 max-h-60 overflow-y-auto no-scrollbar"></div>
         </div>
-
-        <button onclick="resetApp()" class="w-full text-center mt-8 text-gray-400 text-xs hover:text-red-500 transition">အချက်အလက်အားလုံး ဖျက်မည်</button>
     </div>
 
     <script>
@@ -68,9 +60,7 @@
         if (goal > 0) {
             goalInput.value = goal;
             goalInput.disabled = true;
-            goalInput.classList.add('text-gray-800');
         }
-
         document.getElementById('date').valueAsDate = new Date();
         updateUI();
 
@@ -100,21 +90,13 @@
             document.getElementById('remainingDisplay').innerText = Math.max(0, goal - total).toLocaleString();
             
             historyContainer.innerHTML = savings.slice().reverse().map(item => `
-                <div class="flex justify-between items-center border-b border-gray-50 pb-3">
-                    <div>
-                        <p class="text-sm font-medium text-gray-800">${item.date}</p>
-                    </div>
-                    <p class="font-bold text-gray-900">+ ${item.amount.toLocaleString()}</p>
+                <div class="flex justify-between items-center border-b border-gray-700 pb-3">
+                    <p class="text-sm text-gray-400">${item.date}</p>
+                    <p class="font-bold">+ ${item.amount.toLocaleString()}</p>
                 </div>
             `).join('');
-        }
-
-        function resetApp() {
-            if (confirm('ဒေတာအားလုံး ဖျက်ပစ်မှာ သေချာပါသလား?')) {
-                localStorage.clear();
-                location.reload();
-            }
         }
     </script>
 </body>
 </html>
+
